@@ -1,0 +1,28 @@
+// Variables, operadores, condiciones y bucles
+var nombre tipo texto es "Mundo"
+var total es 10 mas 5
+var promedio es (total mas 3) entre 2
+
+consola.imprimir("Hola {nombre}, el total es {total}")
+
+si (total mayor 10 y no (total igual 20)) {
+    consola.imprimir("grande")
+} ademas si (total menor 3) {
+    consola.imprimir("chico")
+} sino {
+    consola.imprimir("medio")
+}
+
+var frutas es ["manzana", "pera", "uva"]
+para (fruta en frutas) {
+    consola.imprimir(fruta)
+}
+
+para (i en rango(10)) {
+    si (i igual 2) { pasar }      // continue
+    si (i igual 5) { salir }      // break
+    consola.imprimir(i)
+}
+
+// no existe el '-' unario ni 'mientras': se resta con 0 menos x
+var negativo es 0 menos 5

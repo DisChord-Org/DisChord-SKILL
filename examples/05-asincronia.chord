@@ -1,0 +1,20 @@
+// Una función que usa 'esperar' o llama a otra @asincrono debe ser @asincrono
+@asincrono
+funcion cargar(id tipo numero) -> texto {
+    esperar(100)
+    devolver "dato {id}"
+}
+
+@asincrono
+funcion principal() {
+    var resultado es cargar(1)          // el 'await' se inserta solo
+    consola.imprimir(resultado.mayusculas())
+
+    var todo es Promesa.todas([cargar(1), cargar(2)])
+    consola.imprimir(todo)
+}
+
+principal()
+
+// En el nivel superior 'esperar(...)' sí se permite
+esperar(10)

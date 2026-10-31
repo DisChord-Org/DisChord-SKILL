@@ -1,0 +1,8 @@
+importar { PREFIJO } desde "./config"
+
+exportar funcion saludar(nombre) {
+    devolver "Hola, " mas nombre
+}
+
+exportar var VERSION es 1
+consola.imprimir(PREFIJO)

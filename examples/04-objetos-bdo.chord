@@ -1,0 +1,46 @@
+// BDO: objeto sin ':' ni ','. Clave, espacio, valor.
+var persona es {
+    nombre "Juan"
+    edad 30
+    direccion {
+        ciudad "Lima"
+    }
+    saludar saludarPersona
+}
+
+funcion saludarPersona() {
+    consola.imprimir("hola")
+}
+
+consola.imprimir(persona.direccion.ciudad)
+persona.edad es 31
+persona.saludar()
+
+// con código dentro: línea en blanco entre propiedades y código
+var panas es {
+    Ether "chetado"
+    JustEvil "goat"
+
+    consola.imprimir(JustEvil)
+    JustEvil es "la cabra"
+}
+
+// @BDOI permite valores calculados que usan claves anteriores
+@BDOI
+var capas es {
+    base 2
+    doble (base por 2)
+}
+
+// las palabras reservadas son válidas como clave
+var ajustes es {
+    si 1
+    clase "b"
+    mas 4
+}
+
+// recorrer claves e indexar
+para (clave en persona) {
+    consola.imprimir(clave)
+}
+consola.imprimir(persona["nombre"])

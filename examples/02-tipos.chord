@@ -1,0 +1,28 @@
+// Sistema de tipos opcional (se comprueba en compilación)
+var edad tipo numero es 30
+var activo tipo booleano es verdadero
+var notas tipo numero[] es [7, 8, 9]
+var par tipo [numero, texto] es [1, "a"]
+var mezcla tipo (numero|texto)[] es [1, "a"]
+var dato tipo texto|numero es "x"
+var ahora tipo Fecha es nuevo Fecha()
+var tabla tipo Mapa es nuevo Mapa()
+
+funcion promedio(lista tipo numero[]) -> numero {
+    var suma tipo numero es lista.reducir(sumar, 0)
+    devolver suma entre lista.longitud
+}
+
+funcion sumar(acumulado tipo numero, valor tipo numero) -> numero {
+    devolver acumulado mas valor
+}
+
+funcion saludar(nombre tipo texto) {
+    consola.imprimir("Hola {nombre}")
+}
+
+consola.imprimir(promedio(notas))
+saludar("Ana")
+tabla.poner("a", 1)
+consola.imprimir(par[0])
+consola.imprimir(tipo edad)     // 'tipo x' en una expresión devuelve el tipo (typeof)

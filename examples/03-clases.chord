@@ -1,0 +1,41 @@
+clase Animal {
+    Animal(nombre) {
+        esta.nombre es nombre
+    }
+
+    funcion hablar() {
+        consola.imprimir(esta.nombre mas " hace un sonido")
+    }
+
+    @fijar
+    funcion especie() {
+        devolver "animal"
+    }
+}
+
+clase Perro extiende Animal {
+    Perro(nombre) {
+        super(nombre)
+    }
+
+    funcion hablar() {
+        consola.imprimir(esta.nombre mas " ladra")
+    }
+}
+
+// forma corta: 'nuevo Base Derivada { ... }'
+nuevo Animal Gato {
+    Gato(nombre) {
+        super(nombre)
+    }
+
+    funcion hablar() {
+        consola.imprimir(esta.nombre mas " maúlla")
+    }
+}
+
+var animales tipo Animal[] es [nuevo Perro("Rex"), nuevo Gato("Michi")]
+para (a en animales) {
+    a.hablar()
+}
+consola.imprimir(Animal.especie())

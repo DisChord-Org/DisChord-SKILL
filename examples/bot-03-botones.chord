@@ -1,0 +1,37 @@
+nuevo boton Aceptar {
+    id "aceptar"
+    etiqueta "Aceptar"
+    estilo "verde"
+    emoji "✅"
+}
+
+nuevo boton Rechazar {
+    id "rechazar"
+    etiqueta "Rechazar"
+    estilo "rojo"
+}
+
+funcion alAceptar(interaccion, cliente) {
+    imprimir("aceptado")
+}
+
+funcion alRechazar(interaccion, cliente) {
+    imprimir("rechazado")
+}
+
+nuevo comando Confirmar {
+    descripcion "Pide una confirmación"
+
+    var msg es enviar mensaje {
+        contenido "¿Seguro?"
+        boton [ Aceptar, Rechazar ]
+    }
+
+    recolector msg {
+        tiempo 30000
+        alPulsarId {
+            aceptar alAceptar
+            rechazar alRechazar
+        }
+    }
+}

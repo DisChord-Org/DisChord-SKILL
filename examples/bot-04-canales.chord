@@ -1,0 +1,24 @@
+nuevo comando Canales {
+    descripcion "Gestiona canales"
+
+    opciones {
+        nombre {
+            tipo "texto"
+            descripcion "Nombre del canal"
+            requerido verdadero
+        }
+    }
+
+    var nuevoCanal es crear canal {
+        nombre nombre
+        tipo "texto"
+        tema "Creado por el bot"
+    }
+
+    var todos es listar canales { tipo "texto" }
+    consola.imprimir(todos)
+
+    enviar mensaje {
+        contenido "Canal creado"
+    }
+}

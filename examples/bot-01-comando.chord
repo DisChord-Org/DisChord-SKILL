@@ -1,0 +1,22 @@
+nuevo comando Avatar {
+    descripcion "Muestra el avatar de un usuario"
+    contextos [ "Servidor" ]
+
+    opciones {
+        persona {
+            tipo "usuario"
+            descripcion "El usuario cuyo avatar quieres ver"
+            requerido verdadero
+        }
+    }
+
+    nuevo embed AvatarEmbed {
+        titulo "Avatar de {persona.nombre}"
+        color persona.colorPerfil
+        imagen persona.avatarUrl
+    }
+
+    enviar mensaje {
+        embed AvatarEmbed
+    }
+}

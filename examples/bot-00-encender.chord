@@ -1,0 +1,5 @@
+encender bot {
+    token "TU_TOKEN_AQUÍ"
+    prefijo "!"
+    intenciones [ "MensajesDelServidor", "ContenidoDelMensaje", "MiembrosDelServidor" ]
+}
