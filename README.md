@@ -1,8 +1,8 @@
 # DisChord Skill
 
-Skill para Claude que le enseña a escribir, depurar y explicar código [DisChord](https://github.com/DisChord-Org/DisChord): el lenguaje con sintaxis en español que compila a JavaScript y, con su capa de bots, a bots de Discord sobre Seyfert.
+Skill para modelo de IA que enseña a escribir, depurar y explicar código [DisChord](https://github.com/DisChord-Org/DisChord): el lenguaje con sintaxis en español que compila a JavaScript y, con su capa de bots, a bots de Discord sobre Seyfert.
 
-Con la skill instalada, Claude conoce la sintaxis (`es`, `si`, `para`, `mas`, `igual`…), el sistema de tipos, la asincronía automática, los comandos, eventos, botones, embeds y canales, y valida su código con el compilador antes de entregarlo.
+Con la skill instalada, el modelo conoce la sintaxis (`es`, `si`, `para`, `mas`, `igual`…), el sistema de tipos, la asincronía automática, los comandos, eventos, botones, embeds y canales, y valida su código con el compilador antes de entregarlo.
 
 ## Instalación
 
@@ -12,11 +12,11 @@ Clona el repositorio dentro de tu carpeta de skills:
 git clone https://github.com/DisChord-Org/DisChord-SKILL.git ~/.claude/skills/dischord
 ```
 
-Claude carga la skill cuando la petición menciona DisChord, archivos `.chord` o el comando `dischord`.
+El modelo carga la skill cuando la petición menciona DisChord, archivos `.chord` o el comando `dischord`.
 
 ## Requisitos
 
-Para que Claude pueda validar el código necesita el compilador de [DisChord](https://github.com/DisChord-Org/DisChord) (`dischord` en el `PATH`, o el repositorio clonado). El proyecto donde se compile debe tener un `package.json` con `"type": "module"`.
+Para que el modelo pueda validar el código necesita el compilador de [DisChord](https://github.com/DisChord-Org/DisChord) (`dischord` en el `PATH`, o el repositorio clonado). El proyecto donde se compile debe tener un `package.json` con `"type": "module"`.
 
 ## Contenido
 
