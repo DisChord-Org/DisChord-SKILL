@@ -1,6 +1,6 @@
 # Biblioteca estándar (corelib) — referencia completa
 
-Generada de `dischord corelib --json` (compilador 1.8.0). Si el compilador cambia, **regenera con ese comando**: es la fuente de verdad. Notación: `p?` opcional, `...p` resto de argumentos. Los métodos de instancia se llaman sobre el valor (`"hola".mayusculas()`); los estáticos sobre la clase (`Mates.redondear(2.5)`). Los métodos llevan **paréntesis siempre** (`lista.agregar(1)`); las propiedades **no** (`lista.longitud`). Confundirlos es error de compilación.
+Generada de `dischord corelib --json`. Si el compilador cambia, **regenera con ese comando**: es la fuente de verdad. Notación: `p?` opcional, `...p` resto de argumentos. Los métodos de instancia se llaman sobre el valor (`"hola".mayusculas()`); los estáticos sobre la clase (`Mates.redondear(2.5)`). Los métodos llevan **paréntesis siempre** (`lista.agregar(1)`); las propiedades **no** (`lista.longitud`). Confundirlos es error de compilación.
 
 ## Funciones globales
 - `esperar` (function, async)
