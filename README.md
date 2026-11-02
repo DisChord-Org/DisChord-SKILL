@@ -22,13 +22,9 @@ Para que el modelo pueda validar el código necesita el compilador de [DisChord]
 
 | Ruta | Qué contiene |
 | :--- | :--- |
-| `SKILL.md` | Instrucciones principales: flujo de trabajo, reglas de oro y referencia del lenguaje base. |
-| `references/tipos.md` | Sintaxis de tipos, qué comprueba el compilador y cómo infiere. |
-| `references/asincronia.md` | `@asincrono` y el `await` automático. |
+| `SKILL.md` | Instrucciones principales: flujo de trabajo, estructura de un bot, reglas que la IA suele fallar y sintaxis esencial. |
 | `references/bots.md` | Capa de Discord: bot, comandos, eventos, mensajes, botones, recolectores y canales. |
 | `references/cli.md` | La CLI `chord` (init, compile, run, update, pkg), el compilador `dischord-compiler` y las librerías oficiales. |
-| `references/errores.md` | Catálogo de errores del compilador con su causa y arreglo. |
-| `references/corelib.md` | Biblioteca estándar con firmas completas, generada de `dischord corelib --json`. |
 | `examples/` | Archivos `.chord` de ejemplo y `proyecto-bot/`, un bot completo con la estructura que exige DisChord (`src/index.chord`, `src/comandos/`, `src/eventos/`, `src/componentes/`). Todo pasa `dischord --check`. |
 
 ## Cómo se validó
@@ -39,7 +35,6 @@ Los ejemplos se comprobaron con el compilador de DisChord:
 dischord examples/01-basico.chord --check --json
 ```
 
-`references/corelib.md` sale de `dischord corelib --json`. Si el compilador cambia, regenera ese archivo con el mismo comando y vuelve a validar los ejemplos.
 
 ## Limitaciones
 
