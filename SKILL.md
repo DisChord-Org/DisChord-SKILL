@@ -13,7 +13,7 @@ DisChord es un **transpilador**: lees/escribes `.chord`, el compilador genera Ja
 | **dischord** | Bots de Discord: bot, comandos slash/prefijo, eventos, mensajes, embeds, botones, recolectores, canales | `src/dischord/` |
 
 El resto del ecosistema: `DischordCLI` (CLI), `DisChord-Code-Studio` (IDE de escritorio con modo `chord`), `DisChord_Server`.
-Repo principal del compilador: `~/Documentos/Projects/DisChord` (v1.8.0 cuando se escribió esta skill). Sus tests `tester/tests/*/input.chord` son ejemplos de referencia fiables.
+Repo principal del compilador: `~/Documentos/Projects/DisChord`. Sus tests `tester/tests/*/input.chord` son ejemplos de referencia fiables.
 
 ## Índice de esta skill
 
@@ -22,22 +22,23 @@ Repo principal del compilador: `~/Documentos/Projects/DisChord` (v1.8.0 cuando s
 | Sintaxis y semántica del lenguaje base | este archivo |
 | Tipos, inferencia y qué comprueba el compilador | [references/tipos.md](references/tipos.md) |
 | Funciones async / `@asincrono` / `await` automático | [references/asincronia.md](references/asincronia.md) |
+| **Ejecutar/compilar/crear proyectos, actualizar, librerías (`chord`)** | [references/cli.md](references/cli.md) |
 | Bots: comandos, eventos, mensajes, botones, canales | [references/bots.md](references/bots.md) |
 | Todos los métodos de `Texto`, `Lista`, `Mates`, `Mapa`… con firmas | [references/corelib.md](references/corelib.md) |
 | Interpretar un error del compilador | [references/errores.md](references/errores.md) |
-| Plantillas completas ya validadas | carpeta [examples/](examples) |
+| Plantillas completas ya validadas | carpeta [examples/](examples); proyecto de bot completo en [examples/proyecto-bot](examples/proyecto-bot) |
 
 ## Flujo de trabajo obligatorio
 
 1. **Escribe** el `.chord`. Parte de la plantilla de `examples/` más cercana.
 2. **Valida** antes de entregar: `dischord archivo.chord --check --json`.
    Devuelve `{"ok":bool,"diagnostics":[{"file","phase","severity","message","line","column"}]}`. Fases: `Lexer`, `Parser`, `Análisis`, `Interno`. Itera hasta `ok:true`.
-3. El directorio de trabajo necesita un `package.json` con `"type": "module"` (si no, error de fase `Interno`).
-4. Si `dischord` no está instalado: `node ~/Documentos/Projects/DisChord/bin/dischord.js …` (o `npm link` en el repo).
-5. Solo si el usuario lo pide, ejecuta: `dischord archivo.chord` (compila a `dist/` y corre). Un archivo con `encender bot` **arranca el bot real** contra Discord: no lo ejecutes sin token válido y permiso expreso.
+3. El directorio de trabajo necesita un `package.json` con `"type": "module"` (si no, error de fase `Interno`). Para bots, **respeta o crea la estructura `src/index.chord` + `src/comandos/` + `src/eventos/`** y valida el proyecto entero con `dischord src --check --json`.
+4. **Dos ejecutables** (detalle en [references/cli.md](references/cli.md)): **`chord`** es la CLI para crear, compilar y **ejecutar** proyectos; **`dischord-compiler`** es el compilador con las opciones finas de validación (el repo lo expone como `node ~/Documentos/Projects/DisChord/bin/dischord.js` o `dischord`). Donde esta skill escribe `dischord …`, usa el que esté instalado.
+5. **Ejecutar un proyecto = `chord run src/index.chord`** (compila todo `src/` y lanza `dist/index.js`). `chord compile src/index.chord` solo compila. Pasa siempre `src/index.chord`, no la carpeta ni un archivo de una subcarpeta. `chord run` **arranca el bot real** contra Discord: no lo ejecutes sin token válido y permiso expreso.
 6. Ante cualquier duda sobre vocabulario, consulta `dischord corelib --json` (palabras clave, clases, bloques, eventos, ámbitos) en lugar de adivinar.
 
-### Opciones de la CLI
+### Opciones del compilador
 
 | Opción | Efecto |
 |---|---|
@@ -50,6 +51,17 @@ Repo principal del compilador: `~/Documentos/Projects/DisChord` (v1.8.0 cuando s
 | `corelib [--json]` | Vocabulario del lenguaje. |
 
 Códigos de salida: `0` ok · `1` el código tiene errores (o el bot falló) · `2` la herramienta no pudo hacer su trabajo.
+
+### Comandos de `chord` (resumen)
+
+| Comando | Qué hace |
+|---|---|
+| `chord init <ruta>` | Crea un proyecto (`package.json`, `seyfert`, `src/index.chord`, `.gitignore`). No crea `comandos/` ni `eventos/`. |
+| `chord compile src/index.chord` | Compila todo `src/` a `dist/` sin ejecutar. |
+| `chord run src/index.chord` | Compila y ejecuta `dist/index.js` (arranca el bot). |
+| `chord update <cli\|compiler\|all> [-f] [--json]` | Actualiza la CLI y/o el compilador. |
+| `chord pkg install\|uninstall\|search\|use\|unuse\|sync` | Gestiona las librerías (`lib:nombre`). |
+| `chord -v` / `chord -h` | Versión / ayuda. |
 
 ## Reglas de oro (lo que más se rompe)
 
@@ -64,7 +76,8 @@ Códigos de salida: `0` ok · `1` el código tiene errores (o el bot falló) · 
 9. **No declares nombres de la biblioteca estándar** (`Mapa`, `Mates`, `Fecha`, `JSON`, `Texto`, `Lista`, `consola`…) como variable, función, clase, parámetro, variable de bucle ni import. Tampoco los **nombres inyectados** (`usuario`, `canal`, `cliente`, `mensaje`…) donde el contexto ya los define.
 10. **Métodos con paréntesis, propiedades sin ellos**: `lista.longitud`, `texto.mayusculas()`, `mapa.tamano`. Equivocarse es error (`'agregar' es un método de Lista: llámalo con paréntesis`).
 11. **Un archivo = un `nuevo comando` o un `nuevo evento`** como máximo (el resto —`encender bot`, `nuevo boton`, `nuevo embed`, funciones, clases— puede convivir).
-12. **Valida con `--check` antes de responder.** Nunca entregues `.chord` sin compilar.
+12. **Estructura de proyecto fija para bots**: `src/index.chord` (con `encender bot`), **`src/comandos/`** para cada `nuevo comando` y **`src/eventos/`** para cada `nuevo evento`. Un comando creado en `src/` o en cualquier otra carpeta compila sin errores pero **Seyfert no lo detecta** y no existe en Discord. `src/componentes/` existe pero se queda vacía. `nuevo boton`/`nuevo embed` se declaran **dentro** del comando que los usa, nunca en un módulo aparte (falla al cargar). Detalle en [references/bots.md](references/bots.md#estructura-del-proyecto-obligatoria).
+13. **Valida con `--check` antes de responder.** Nunca entregues `.chord` sin compilar. En un proyecto, valida todo con `dischord src --check --json`.
 
 ## Léxico
 
@@ -221,7 +234,7 @@ Los literales de lista admiten salto de línea y comas. Índices fuera de rango 
 
 ```chord
 importar { PREFIJO } desde "./config"       // busca config.chord relativo al archivo
-importar { TOKEN } desde "lib:ent"          // módulos de biblioteca 'lib:'
+importar { ent } desde "lib:ent"            // librerías instaladas con `chord pkg` (carpeta ./lib)
 exportar funcion saludar(n) { devolver "Hola " mas n }
 exportar var VERSION es 1
 exportar clase Util { }
@@ -239,7 +252,7 @@ exportar clase Util { }
 ## Cómo actuar según la petición
 
 - **"Hazme un script/función/clase en DisChord"** → parte de `examples/01…06`, aplica las reglas de oro, valida.
-- **"Hazme un bot/comando/evento"** → lee [references/bots.md](references/bots.md), reparte en archivos (uno por comando/evento) y valida cada uno.
+- **"Hazme un bot/comando/evento"** → lee [references/bots.md](references/bots.md) **y su sección de estructura**. Si el proyecto ya existe, mira dónde están sus comandos y respeta esa estructura; si no, crea `src/index.chord`, `src/comandos/`, `src/eventos/`. Un archivo por comando/evento, y valida el proyecto con `dischord src --check --json`.
 - **"Me da este error…"** → busca el mensaje en [references/errores.md](references/errores.md); si no está, reproduce con `--check --json` y `--emit ast` para localizar la fase.
 - **"Convierte este JS/Python a DisChord"** → traduce operadores a palabras, `=`→`es`, `function`→`funcion`, `while`→`para … en rango` o reestructura, lambdas→funciones con nombre, `;` fuera, `-x`→`0 menos x`. Valida.
 - **"Explica este código .chord"** → explica construcción por construcción; si dudas del significado, `--emit ast` o la salida JS en `dist/`.
@@ -247,4 +260,4 @@ exportar clase Util { }
 
 ## Honestidad sobre los límites
 
-Si el usuario pide algo que el lenguaje no soporta (while, try/catch, lambdas, etc.), dilo y propón el rodeo (`js("…")`, función con nombre, reestructurar). No inventes sintaxis ni métodos: consulta `corelib` o los tests. Si dos versiones del compilador pudieran diferir, ejecuta `dischord corelib --json` y compara `compilerVersion`.
+Si el usuario pide algo que el lenguaje no soporta (while, try/catch, lambdas, etc.), dilo y propón el rodeo (`js("…")`, función con nombre, reestructurar). No inventes sintaxis ni métodos: consulta `corelib` o los tests.

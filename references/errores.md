@@ -83,6 +83,26 @@ Cada diagnóstico trae `phase` (`Lexer` → `Parser` → `Análisis` → `Intern
 | `… solo tiene uno dinámico ('b{n}'); alPulsarId no puede enlazar ids dinámicos` | Usa ids fijos para los botones que quieras recolectar. |
 | `Una fila de botones admite como máximo 5` | Máx. 5 botones por fila. |
 
+## Fallos silenciosos (compila bien pero no funciona)
+
+| Síntoma | Causa → arreglo |
+|---|---|
+| El comando/evento compila pero **no aparece en Discord** o no se ejecuta | Está fuera de `src/comandos/` / `src/eventos/` (p. ej. `src/ping.chord`). Seyfert solo carga esas carpetas de `dist/`. Muévelo y recompila. |
+| Error en ejecución `Button is not defined` / `Embed is not defined` | `nuevo boton` / `nuevo embed` están en un módulo propio (p. ej. `src/componentes/…` o `src/utilidades/…`) que otro archivo importa. Declara el botón/embed dentro del comando que lo usa. |
+| `dischord archivo.chord` arranca pero no hay bot | Falta `src/index.chord` con `encender bot`; el proyecto ejecuta `dist/index.js`. |
+| Un `.js` viejo sigue en `dist/` | Solo una compilación completa de `src/` borra los obsoletos: `dischord src --no-run`. |
+
+## Errores de la CLI `chord`
+
+| Mensaje | Causa → arreglo |
+|---|---|
+| `Se esperaba una extensión '.chord'` (con `Se encontró ''`) | Pasaste la carpeta `src`. Usa `chord compile src/index.chord`. |
+| `No se ha encontrado la carpeta src. Se encontró 'comandos'` | El archivo no está **directamente** en `src/` (o está fuera). Usa `src/index.chord`. |
+| `No se ha encontrado el archivo index.js en la carpeta dist` | Falta `src/index.chord`. |
+| `Ya existe un proyecto en esa ruta.` | `chord init` sobre una carpeta existente (también `.`). Usa una ruta nueva. |
+| `Node.js no está instalado o no se encuentra en el PATH` | `chord run` necesita Node. |
+| `No se encontró el módulo 'lib:x'` | Librería sin enlazar: `chord pkg use x <versión>` o `chord pkg sync`. |
+
 ## Depurar lo desconocido
 
 1. `dischord x.chord --check --json` → fase, línea, columna.

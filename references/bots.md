@@ -1,21 +1,61 @@
 # Capa dischord: bots de Discord
 
-Traduce a [Seyfert](https://github.com/tiramisulabs/seyfert). Ejemplos validados: `examples/bot-*.chord`.
+Traduce a [Seyfert](https://github.com/tiramisulabs/seyfert). Proyecto de ejemplo completo y validado: [`examples/proyecto-bot/`](../examples/proyecto-bot).
 
-## Estructura recomendada del proyecto
+## Estructura del proyecto (OBLIGATORIA)
+
+Seyfert solo carga comandos y eventos de carpetas con nombre fijo. DisChord compila cada `src/<ruta>.chord` a `dist/<ruta>.js` (misma ruta relativa a `src/`) y genera `seyfert.config.mjs` con `base: "dist"`, `commands: "comandos"`, `events: "eventos"`, `components: "componentes"`. Por eso la ubicación **no es libre**:
 
 ```
 mi-bot/
-├─ package.json            # "type": "module"
-├─ bot.chord               # encender bot { … }  (uno por proyecto)
-├─ comandos/ping.chord     # 1 comando por archivo
-├─ comandos/avatar.chord
-├─ eventos/entrada.chord   # 1 evento por archivo
-├─ botones.chord           # nuevo boton / nuevo embed reutilizables (se importan o se redeclaran)
-└─ config.chord            # exportar var PREFIJO …
+├─ package.json              # "type": "module"  (obligatorio)
+├─ seyfert.config.mjs        # lo genera el compilador, no lo escribas
+├─ src/
+│  ├─ index.chord            # punto de entrada: aquí va `encender bot { … }`
+│  ├─ comandos/              # TODOS los nuevo comando — 1 por archivo
+│  │  ├─ ping.chord
+│  │  └─ util/hora.chord     # subcarpetas permitidas
+│  ├─ eventos/               # TODOS los nuevo evento — 1 por archivo
+│  │  └─ listo.chord
+│  └─ componentes/           # reservada por Seyfert: déjala vacía (ver más abajo)
+└─ dist/                     # salida compilada; no la edites
 ```
 
-**Reglas de archivo**: un `nuevo comando` **o** un `nuevo evento` por archivo; solo un `encender bot` en todo el proyecto. `dischord <archivo>` compila el proyecto de ese directorio.
+| Qué | Dónde va | Qué pasa si lo pones en otro sitio |
+|---|---|---|
+| `encender bot` | `src/index.chord` | `dischord src` ejecuta `dist/index.js`; sin él no arranca el bot. |
+| `nuevo comando` | `src/comandos/…` | En `src/mal.chord` compila a `dist/mal.js`, **Seyfert no lo detecta** y el comando no existe en Discord. Sin ningún error del compilador. |
+| `nuevo evento` | `src/eventos/…` | Igual: no se registra. |
+| funciones, clases, config compartidas | `src/` (p. ej. `src/utilidades/…`) | Se importan con `importar { x } desde "../utilidades/x"`. |
+| `nuevo boton` / `nuevo embed` | **dentro del archivo del comando/evento que los usa** | En un módulo aparte (incluida `componentes/`) compilan pero **fallan al cargar** con `Button is not defined`. |
+
+Reglas:
+
+- **Nunca crees comandos o eventos directamente en `src/`** ni en una carpeta distinta a `src/comandos/` o `src/eventos/` (ni `comandos/` en la raíz del proyecto: debe colgar de `src/`).
+- Los nombres de carpeta están en español y son exactos: `comandos`, `eventos`, `componentes`.
+- Un `nuevo comando` **o** un `nuevo evento` por archivo; un solo `encender bot` (en `index.chord`).
+- `src/componentes/` es la carpeta de componentes de Seyfert (`components: "componentes"` en `seyfert.config.mjs`). El compilador la crea siempre en `dist/`, pero DisChord **no genera nada para ella**: los botones se manejan con `recolector`. Créala vacía (con un `.gitkeep` si usas git) y **no pongas ahí `nuevo boton` ni `nuevo embed`**.
+- **Declara `nuevo boton` y `nuevo embed` dentro del archivo del comando/evento que los usa.** Comprobado: un módulo que solo contiene esas declaraciones se compila a `export let X = new Button()…` **sin** `import { Button } from 'seyfert'`, así que al importarlo (o al cargarlo Seyfert desde `componentes/`) lanza `ReferenceError: Button is not defined`. El compilador no lo detecta. Si dos comandos necesitan el mismo botón, repite la declaración en cada uno.
+- Al compilar un directorio o cualquier archivo dentro de `src/`, el compilador procesa **todos** los `.chord` de `src/`, borra del `dist/` los `.js` obsoletos y crea `dist/comandos`, `dist/eventos` y `dist/componentes` aunque estén vacías.
+- Un archivo suelto **fuera** de una carpeta `src/` se compila como script independiente: no sirve para un bot.
+
+### Comandos de proyecto
+
+```bash
+chord run src/index.chord                 # compila y ejecuta el bot (arranca el bot REAL)
+chord compile src/index.chord             # compila a dist/ sin arrancar
+dischord-compiler src --check --json      # valida TODO el proyecto sin escribir nada
+```
+
+`chord` exige que le pases un **archivo** directamente dentro de `src/` (usa `src/index.chord`), nunca la carpeta ni `src/comandos/x.chord`. El compilador (`dischord-compiler`) sí acepta la carpeta `src`. Todos los detalles en [cli.md](cli.md).
+
+### Cuando el usuario pida "un comando"
+
+1. Si no existe, crea la estructura: `package.json` (`"type": "module"`), `src/index.chord` con `encender bot`, `src/comandos/`, `src/eventos/`.
+2. Crea el archivo en `src/comandos/<nombre>.chord` (o `src/eventos/<nombre>.chord`).
+3. Valida con `dischord-compiler src --check --json` (o `dischord src --check --json`).
+4. Comprueba la salida (`dischord src --no-run` y mira que exista `dist/comandos/<nombre>.js`) cuando quieras estar seguro de que quedará registrado.
+5. Si el proyecto ya existe, **respeta su estructura**: mira dónde están los comandos que ya hay antes de crear uno nuevo.
 
 ## Regla de los bloques (afecta a todo)
 
@@ -49,7 +89,7 @@ Intenciones válidas: ConfiguracionDelAutomoderador, EjecucionDelAutomoderador, 
 
 Elige solo las necesarias: leer texto de mensajes (`mensaje.contenido`, comandos con prefijo) exige `MensajesDelServidor` + `ContenidoDelMensaje`; eventos de miembros exigen `MiembrosDelServidor`; etc.
 
-**Seguridad del token**: no lo escribas en repos públicos ni lo pegues en respuestas. Guíalo por un import (`importar { TOKEN } desde "./secretos"` o `lib:ent` — ver tests `Module/LibraryImport`) y dile al usuario que lo rote si se expuso.
+**Seguridad del token**: no lo escribas en repos públicos ni lo pegues en respuestas. Guárdalo en un `.env` y léelo con la librería oficial `ent` (`importar ent` → `token ent.TOKEN_DISCORD`; instalación en [cli.md](cli.md#librerías-chord-pkg)), o con un import local. Dile al usuario que lo rote si se expuso.
 
 ## `nuevo comando`
 

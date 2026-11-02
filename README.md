@@ -26,13 +26,14 @@ Para que el modelo pueda validar el código necesita el compilador de [DisChord]
 | `references/tipos.md` | Sintaxis de tipos, qué comprueba el compilador y cómo infiere. |
 | `references/asincronia.md` | `@asincrono` y el `await` automático. |
 | `references/bots.md` | Capa de Discord: bot, comandos, eventos, mensajes, botones, recolectores y canales. |
+| `references/cli.md` | La CLI `chord` (init, compile, run, update, pkg), el compilador `dischord-compiler` y las librerías oficiales. |
 | `references/errores.md` | Catálogo de errores del compilador con su causa y arreglo. |
 | `references/corelib.md` | Biblioteca estándar con firmas completas, generada de `dischord corelib --json`. |
-| `examples/` | Archivos `.chord` de ejemplo; todos pasan `dischord --check`. |
+| `examples/` | Archivos `.chord` de ejemplo y `proyecto-bot/`, un bot completo con la estructura que exige DisChord (`src/index.chord`, `src/comandos/`, `src/eventos/`, `src/componentes/`). Todo pasa `dischord --check`. |
 
 ## Cómo se validó
 
-Los ejemplos se comprobaron con el compilador de DisChord v1.8.0:
+Los ejemplos se comprobaron con el compilador de DisChord:
 
 ```bash
 dischord examples/01-basico.chord --check --json
@@ -42,5 +43,4 @@ dischord examples/01-basico.chord --check --json
 
 ## Limitaciones
 
-- La skill se escribió contra la versión 1.8.0 del compilador; versiones posteriores pueden cambiar la sintaxis.
 - Los bots de ejemplo solo se compilaron; no se ejecutaron contra Discord.
