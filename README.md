@@ -25,6 +25,7 @@ Para que el modelo pueda validar el código necesita el compilador de [DisChord]
 | `SKILL.md` | Instrucciones principales: flujo de trabajo, estructura de un bot, reglas que la IA suele fallar y sintaxis esencial. |
 | `references/bots.md` | Capa de Discord: bot, comandos, eventos, mensajes, botones, recolectores y canales. |
 | `references/cli.md` | La CLI `chord` (init, compile, run, update, pkg), el compilador `dischord-compiler` y las librerías oficiales. |
+| `references/librerias.md` | Librerías oficiales (`ent`, `sf`, `rutas`, `procesos`, `internet`): exports reales y cómo esperar sus funciones async. |
 | `examples/` | Archivos `.chord` de ejemplo y `proyecto-bot/`, un bot completo con la estructura que exige DisChord (`src/index.chord`, `src/comandos/`, `src/eventos/`, `src/componentes/`). Todo pasa `dischord --check`. |
 
 ## Cómo se validó

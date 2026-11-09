@@ -8,7 +8,8 @@ description: Escribe, depura y explica código DisChord (.chord), el lenguaje co
 Transpilador a JavaScript (ESM). Capas: **chord** (lenguaje base) y **dischord** (bots de Discord sobre Seyfert). Código del compilador: `~/Documentos/Projects/DisChord`; sus `tester/tests/*/input.chord` son ejemplos fiables.
 
 - Bots (comandos, eventos, mensajes, botones, canales) → [references/bots.md](references/bots.md)
-- `chord`, librerías `lib:`, opciones del compilador → [references/cli.md](references/cli.md)
+- `chord`, instalar librerías, opciones del compilador → [references/cli.md](references/cli.md)
+- Usar librerías oficiales (`sf`, `rutas`, `procesos`, `internet`, `ent`): nombres reales y `await` manual → [references/librerias.md](references/librerias.md)
 - Plantillas validadas → [examples/](examples) (bot completo en `examples/proyecto-bot`)
 - Vocabulario exacto (clases, métodos con firmas, eventos, bloques): **`dischord-compiler corelib --json`**. No lo adivines.
 
