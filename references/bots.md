@@ -14,6 +14,8 @@ encender bot {
 }
 ```
 
+Cualquier otra clave de `encender bot` es una propiedad propia: se lee como `cliente.<clave>` en comandos y eventos (valor cualquier expresión; no pueden coincidir con las de `cliente`: `cache`, `logger`, `ping`…).
+
 Intenciones: nombres en inglés-español de Discord (`MensajesDelServidor`, `ContenidoDelMensaje`, `MiembrosDelServidor`, `MensajesDirectos`, `Servidores`…); un valor inválido da error con la lista completa. Leer `mensaje.contenido` exige `ContenidoDelMensaje`; eventos de miembros, `MiembrosDelServidor`.
 
 No escribas el token en repos ni respuestas: guárdalo en `.env` y léelo con la librería `ent` (cli.md).

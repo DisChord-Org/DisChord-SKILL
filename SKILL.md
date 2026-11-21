@@ -9,7 +9,7 @@ Transpilador a JavaScript (ESM). Capas: **chord** (lenguaje base) y **dischord**
 
 - Bots (comandos, eventos, mensajes, botones, canales) → [references/bots.md](references/bots.md)
 - `chord`, instalar librerías, opciones del compilador → [references/cli.md](references/cli.md)
-- Usar librerías oficiales (`sf`, `rutas`, `procesos`, `internet`, `ent`): nombres reales y `await` manual → [references/librerias.md](references/librerias.md)
+- Usar librerías oficiales (`sf`, `rutas`, `procesos`, `internet`, `ent`, `bdlocal`): nombres reales y `await` manual → [references/librerias.md](references/librerias.md)
 - Plantillas validadas → [examples/](examples) (bot completo en `examples/proyecto-bot`)
 - Vocabulario exacto (clases, métodos con firmas, eventos, bloques): **`dischord-compiler corelib --json`**. No lo adivines.
 
@@ -99,7 +99,7 @@ var r es js("1 + 1")                // escape a JavaScript crudo
 
 ## Asincronía
 
-Llamar a una función `@asincrono` desde una función **no** `@asincrono` es error (`márcala con @asincrono`). Vale desde el nivel superior y desde comandos/eventos. Un método sobrescrito debe tener la misma asincronía que el de la clase base.
+Llamar a una función `@asincrono` desde una función **no** `@asincrono` es error (`márcala con @asincrono`). Vale desde el nivel superior y desde comandos/eventos. Un método sobrescrito debe tener la misma asincronía que el de la clase base. Las `@asincrono` importadas con llaves de un módulo con fuente `.chord` también se esperan solas (ver librerias.md).
 
 ## Tipos
 

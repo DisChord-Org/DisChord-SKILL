@@ -1,6 +1,6 @@
 # Librerías oficiales
 
-Se instalan con `chord pkg` (ver `cli.md`) y se importan con `importar { a } desde "lib:nombre"` o `importar nombre` (`nombre.a`).
+Se instalan con `chord pkg` (ver `cli.md`) y se importan con `importar { a } desde "lib:nombre"` o `importar nombre` (`nombre.a`; con las de fuente `.chord`, mejor con llaves).
 
 Los `README.md` instalados tienen errores (los de `rutas` listan `dirname`/`basename`/`extname`, inexistentes) y `--check` no detecta un nombre importado que no existe: falla al ejecutar. Usa solo los nombres de esta tabla; para otros:
 
@@ -8,9 +8,9 @@ Los `README.md` instalados tienen errores (los de `rutas` listan `dirname`/`base
 node -e "import('$HOME/.dischord/libraries/<lib>/<versión>/src/index.js').then(m=>console.log(Object.keys(m).join(' ')))"
 ```
 
-## `await` manual
+## `await`
 
-El `await` automático solo cubre funciones `@asincrono` escritas en `.chord`. Las de `sf`, `procesos` e `internet` son JS y devuelven `Promise { <pending> }`: envuélvelas en una función `@asincrono` propia.
+Se inserta solo para `@asincrono` de un módulo con **fuente `.chord`** (`lib/X/src/index.chord`, o `./otro.chord`) y solo con import **con llaves** (`importar { a } desde …`). No con `importar nombre` + `nombre.a()`. `sf`, `procesos` e `internet` son JS y devuelven `Promise { <pending> }`: envuélvelas en una función `@asincrono` propia.
 
 ```chord
 importar { leer } desde "lib:sf"
@@ -35,6 +35,7 @@ principal()
 |---|---|
 | `ent` | `ent.NOMBRE`: variables de `.env` (o `.ent`), cargadas al importar. Ej.: `token ent.TOKEN_DISCORD`. |
 | `sf` (async) | `existe info leer escribir eliminar copiar mover`. `leer` de carpeta lista nombres; `escribir(ruta)` sin contenido crea la carpeta (y las padre). |
+| `bdlocal` | JSON local con claves `a.b.c`; depende de `sf`. Async (autoawait con import con llaves): `cargar(ruta)` (obligatorio antes de usar la ruta) `guardar establecer borrar empujar quitar sumar restar`. Sync: `obtener tiene todo`. Todas toman `ruta` como primer argumento. |
 | `rutas` | `unir resolver normalizar relativa directorio nombreBase extension analizar formatear esAbsoluta estaDentro raiz separador delimitador path posix win32` |
 | `procesos` | Async: `ejecutar` (→ `{stdout, stderr, codigo}`, no lanza con código ≠ 0), `ejecutarArchivo`. Sync: `lanzar matar entorno variableEntorno establecerVariableEntorno directorioActual cambiarDirectorio pid pidPadre plataforma argumentos version tiempoActividad usoMemoria alSeñal nombreHost directorioHome directorioTemporal tipoSistema versionSistema arquitectura nucleos memoriaTotal memoriaLibre tiempoActividadSistema interfacesRed usuario finDeLinea` |
 | `internet` | Async (→ `{ok, estado, cabeceras, datos}`, `datos` ya decodificado): `obtener enviar peticion resolverHost resolverInverso resolverRegistros`. Sync: `analizar construir parametros construirParametros resolver esValida archivoAUrl urlAArchivo URL URLSearchParams` |

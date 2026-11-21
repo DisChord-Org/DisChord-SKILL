@@ -35,4 +35,4 @@ importar ent                      // atajo de: importar { ent } desde "lib:ent"
 token ent.TOKEN_DISCORD           // dentro de `encender bot`
 ```
 
-Si no está enlazada: `No se encontró el módulo 'lib:x'` → `chord pkg use` o `sync`. Oficiales: `ent` (carga `.env`/`.ent` y expone `ent.NOMBRE`), `sf` (archivos, async), `rutas` (rutas), `internet` (HTTP/DNS, async), `procesos` (procesos, async). Nombres reales y cómo esperar sus funciones async: `librerias.md` (los README instalados tienen errores). Avisa al usuario antes de instalar algo no oficial o sin firmar.
+Si no está enlazada: `No se encontró el módulo 'lib:x'` → `chord pkg use` o `sync`. Oficiales: `ent` (carga `.env`/`.ent` y expone `ent.NOMBRE`), `sf` (archivos, async), `rutas` (rutas), `internet` (HTTP/DNS, async), `procesos` (procesos, async), `bdlocal` (JSON local, async). Nombres reales y cómo esperar sus funciones async: `librerias.md` (los README instalados tienen errores). Avisa al usuario antes de instalar algo no oficial o sin firmar.
